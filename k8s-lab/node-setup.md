@@ -179,18 +179,18 @@ kubeadm token create --print-join-command
 ```
 Add Worker node:
 ```bash
-kubeadm join 10.0.0.10:6443 --token <token> --discovery-token-ca-cert-hash <sha256>
+kubeadm join <IP>:6443 --token <token> --discovery-token-ca-cert-hash <sha256>
 ```
 E.g:
 ```bash
-sudo kubeadm join 10.0.0.10:6443 --token ljl7h0.h3pfua4hzrpshhvb --discovery-token-ca-cert-hash sha256:a7b04bf422af2dd8dd821a179daaaa68a3b6abd96c82210e43dd94f4595401c5
+sudo kubeadm join <IP>:6443 --token ljl7h0.h3pfua4hzrpshhvb --discovery-token-ca-cert-hash sha256:a7b04bf422af2dd8dd821a179daaaa68a3b6abd96c82210e43dd94f4595401c5
 ```
 
 
 
 Configure kubectl (optitional):
 ```
-scp root@10.0.0.10:/etc/kubernetes/admin.conf ~/.kube/config2
+scp root@IP:/etc/kubernetes/admin.conf ~/.kube/config2
 ```
 
 [sachedule on contrlo  plane node](https://medium.com/@shyamsandeep28/scheduling-pods-on-master-nodes-7e948f9cb02c)
@@ -216,83 +216,9 @@ sudo apt install nfs-common
 ```bash
 sudo mount <nfs-server-ip>:<dir-nfs-server> <dir-k8s-node>
 ```
-E.g.
-```bash
-sudo mount 10.0.0.38:/datadrives /nfs/datadrive
-```
 
 6.  Setup auto mount on file */etc/fstab* of Node
 ```bash
 sudo nano /etc/fstab
 <nfs-server-ip>:<dir-nfs-server> <dir-k8s-node> nfs auto,nofail,noatime,nolock,intr,tcp,actimeo=1800 0 0
 ```
-E.g.
-```bash
-10.0.0.38:/datadrives nfs/datadrives nfs auto,nofail,noatime,nolock,intr,tcp,actimeo=1800 0 0
-```
-
-## Extras
-
-Check disks:
-```bash
-lsblk -o NAME,HCTL,SIZE,MOUNTPOINT,FSTYPE | grep -i "sd"
-```
-Check mounted NFS:
-```bash
-mount -l | grep nfs
-```
-
-```bash
-showmount -e
-```
-
-K8s IPs:
-```bash
-kubectl get pods --all-namespaces -o jsonpath='{range .items[*]}{"\n"}{.metadata.name}{":\t"}{.status.podIP}{end}'
-```
-
-Enter Pod:
-```bash
-k exec -i -t -n <n> <pod> -- sh -c "clear; (bash || ash || sh)"
-```
-
-Curl:
-```bash
-kubectl exec -it hive-7cddf8785c-7t5jt -n trino -- curl -v tenant-00-hl.minio.svc.cluster.local:9000/warehouse
-
-```
-
-kubectl exec -it aws-cli -n trino -- sh -c "AWS_ACCESS_KEY_ID=minio AWS_SECRET_ACCESS_KEY=minio123 aws --endpoint-url http://tenant-00-hl.minio.svc.cluster.local:9000 --region us-east-1 s3 ls s3://warehouse"
-
-export AWS_ACCESS_KEY_ID=minio
-export AWS_SECRET_ACCESS_KEY=minio123
-aws s3 ls s3://warehouse --region <region>
-
-
-k apply -n trino -f - <<EOF
-apiVersion: v1
-kind: Pod
-metadata:
-  name: aws-cli
-  namespace: trino
-spec:
-  containers:
-    - name: aws-cli
-      image: amazon/aws-cli
-      command: ["sleep", "infinity"]
-EOF
-
-
-
-kubectl exec -it aws-cli -n trino -- \
-    aws --endpoint-url http://tenant-00-hl.minio.svc.cluster.local:9000 \
-    --region us-east-1 \
-    s3 ls s3://warehouse \
-    --access-key xOgzxnz5cyHS6tTlRGct \
-    --secret-key zdNENzRo9dnhgywjiDqsG3cloYmzHyoekFeUYZaS
-
-kubectl get pv | grep Released | awk '{print $1}' | xargs kubectl delete pv
-
-kubectl -n ? exec -it ? -- bash
-
-kubectl patch <resource-type> <resource-name> -p '{"metadata":{"finalizers":[]}}' --type=merge
