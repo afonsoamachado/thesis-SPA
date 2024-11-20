@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: singlestore-cdc-out-python
+  namespace: streaming
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: singlestore-cdc-out-python
+  template:
+    metadata:
+      labels:
+        app: singlestore-cdc-out-python
+    spec:
+      containers:
+      - name: singlestore-cdc-out-python
+        image: afonsoamachado/singlestore-cdc-out-python
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: TARGET_SYSTEM
+          value: "trino"
+        - name: SOURCE_HOST
+          value: "svc-sdb-cluster-ddl.sdb.svc.cluster.local"
+        - name: SOURCE_PORT
+          value: "3306"
+        - name: SOURCE_USER
+          value: "superadmin"
+        - name: SOURCE_PASSWORD
+          value: "superadmin123"
+        - name: SOURCE_DB
+          value: "test"
+        - name: SOURCE_TABLE
+          value: "customer"
+        - name: TARGET_HOST
+          value: "trino.trino.svc.cluster.local"
+        - name: TARGET_PORT
+          value: "8080"
+        - name: TARGET_USER
+          value: "trino"
+        - name: TARGET_PASSWORD
+          value: ""
+        - name: TARGET_CATALOG
+          value: "kafka"
+        - name: TARGET_DB
+          value: "test"
+        - name: TARGET_TABLE
+          value: "customerstreamjson"
+        - name: VERBOSE
+          value: "true"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"

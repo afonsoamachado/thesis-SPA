@@ -1,0 +1,6 @@
+---
+name: "java"
+description: "description"
+condition: 'request.getHeader("X-Trino-Source") == "java"'
+actions:
+  - 'result.put("routingGroup", "java")'

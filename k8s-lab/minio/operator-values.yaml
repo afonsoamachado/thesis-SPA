@@ -1,0 +1,82 @@
+﻿operator:
+
+  env:
+    - name: OPERATOR_STS_ENABLED
+      value: "on"
+    - name: MINIO_CONSOLE_TLS_ENABLE
+      value: "off"
+  ###
+  # Specify the Operator container image to use for the deployment.
+  image:
+    repository: docker.io/minio/operator
+    tag: v5.0.14
+    pullPolicy: IfNotPresent
+  
+  imagePullSecrets: [ ]
+  
+  runtimeClassName: ~
+  
+  nodeSelector:
+    kubernetes.io/hostname: spa-k8s-01
+
+  replicaCount: 1
+
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    fsGroup: 1000
+  ###
+  # The Kubernetes `SecurityContext <https://kubernetes.io/docs/tasks/configure-pod-container/security-context/>`__ to use for deploying Operator containers.
+  # You may need to modify these values to meet your cluster's security and access settings.
+  containerSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+ 
+  ###
+  #
+  # The `Requests or Limits <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/>`__ for resources to associate to Operator pods.
+  #
+  # These settings can control the minimum and maximum resources requested for each pod.
+  # If no worker nodes can meet the specified requests, the Operator may fail to deploy.
+  resources:
+    requests:
+      cpu: 0.1
+      memory: 256Mi
+      ephemeral-storage: 500Mi
+    limits:
+      cpu: 0.1
+      memory: 256Mi
+      ephemeral-storage: 500Mi
+
+###
+# Root key for Operator Console
+console:
+  ###
+  # Specify ``false`` to disable the Operator Console.
+  #
+  # If the Operator Console is disabled, all management of Operator Tenants must be done through the Kubernetes API.
+  enabled: true
+  ###
+  # Specify the Operator Console container image to use for the deployment.
+  image:
+    repository: docker.io/minio/operator
+    tag: v5.0.14
+    pullPolicy: IfNotPresent
+
+  nodeSelector:
+    kubernetes.io/hostname: spa-k8s-01
+
+  #
+  # The cluster must have sufficient number of available worker nodes to fulfill the request.
+  # Console pods deploy with pod anti-affinity by default, preventing Kubernetes from scheduling multiple pods onto a single Worker node.
+  replicaCount: 1
+  
+  resources:
+    requests:
+      cpu: 0.1
+      memory: 256Mi
+    limits:
+      cpu: 0.1
+      memory: 256Mi

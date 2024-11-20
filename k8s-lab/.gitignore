@@ -1,0 +1,20 @@
+# Docs
+/docs/.$diagrams_tfm.drawio.bkp
+/docs/.idea
+~$*.xlsx
+# Intelij
+.idea
+*.iml
+# Security
+starburstdata.license
+# Java Files
+target
+*.class
+# Flink docker data
+/k8s/Flink/docker/data
+/k8s/Flink/docker/flink_data
+/k8s/Flink/docker/plugins
+dev/demo/target/classes/bcp/drst/Main.class
+benchmark/results/sf1/~$Benchmark.pptx
+# Neo4j data
+/neo4j/local-data

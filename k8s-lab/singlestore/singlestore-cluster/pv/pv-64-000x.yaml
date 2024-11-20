@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-sdb-0001
+spec:
+  capacity:
+    storage: 64Gi 
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive01/pv-sdb-0001
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-sdb-0002
+spec:
+  capacity:
+    storage: 64Gi 
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive01/pv-sdb-0002
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-sdb-0003
+spec:
+  capacity:
+    storage: 64Gi 
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive01/pv-sdb-0003
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-sdb-0004
+spec:
+  capacity:
+    storage: 64Gi 
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive01/pv-sdb-0004
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-sdb-0005
+spec:
+  capacity:
+    storage: 64Gi 
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive01/pv-sdb-0005
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---

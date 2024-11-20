@@ -1,0 +1,109 @@
+replicaCount: 1
+
+image:
+  repository: "trinodb/trino-gateway"
+  tag: "9"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+# Provide configuration for the Trino Gateway dataStore in dataStoreSecret. This node can
+# be left undefined if dataStore is defined under the config node. For production deployments
+# sensitive values should be stored in a Secret
+dataStoreSecret:
+  name: ""
+  key: ""
+
+# Provide configuration for the Trino Gateway backendState in backendStateSecret. This should
+# be used with health check configurations that require backend credentials. This node can
+# be left undefined if dataStore is defined under the config node.
+backendStateSecret:
+  name: "datastore-secret"
+  key: "datastore.yaml"
+
+# Provide configuration for the Trino Gateway authentication configuration in authenticationSecret.
+# This node can be left undefined if dataStore is defined under the config node.
+authenticationSecret:
+  name: ""
+  key: ""
+
+config:
+  logging:
+    type: "external"
+  requestRouter:
+    #SQL clients connect to the request port
+    port: 9080
+    name: testTrinoRouter
+    historySize: 1000
+  server:
+    applicationConnectors:
+        - type: http
+          port: 9081
+          useForwardedHeaders: true
+    adminConnectors:
+        - type: http
+          port: 9082
+          useForwardedHeaders: true
+  clusterStatsConfiguration:
+    monitorType: INFO_API
+  modules:
+  - io.trino.gateway.ha.module.HaGatewayProviderModule
+  - io.trino.gateway.ha.module.ClusterStateListenerModule
+  - io.trino.gateway.ha.module.ClusterStatsMonitorModule
+  managedApps:
+    - io.trino.gateway.ha.GatewayManagedApp
+    - io.trino.gateway.ha.clustermonitor.ActiveClusterMonitor
+  routingRules:
+    rulesEngineEnabled: true
+    rulesConfigPath: "/etc/routing-rules/routing-rules.yaml"
+
+service:
+  type: NodePort
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 0.5
+    memory: 1Gi
+  requests:
+    cpu: 0.5
+    memory: 1Gi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  failureThreshold: 3
+  timeoutSeconds: 1
+  scheme: HTTP
+
+readinessProbe:
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  failureThreshold: 12
+  timeoutSeconds: 1
+  scheme: HTTP
+
+nodeSelector:
+  kubernetes.io/hostname: spa-k8s-01
+  
+volumes:
+  - name: routing-rules
+    configMap:
+      name: routing-rules
+      items:
+        - key: routing-rules.yaml
+          path: routing-rules.yaml
+
+volumeMounts:
+  - name: routing-rules
+    mountPath: "/etc/routing-rules/routing-rules.yaml"
+    subPath: routing-rules.yaml

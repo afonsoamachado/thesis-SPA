@@ -1,0 +1,11 @@
+nodeSelector:
+  kubernetes.io/hostname: spa-k8s-06
+
+operator:
+  resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

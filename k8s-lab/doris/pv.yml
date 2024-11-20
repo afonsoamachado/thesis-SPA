@@ -1,0 +1,203 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-doris-00
+  namespace: doris
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-doris-00
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-doris-01
+  namespace: doris
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-doris-01
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-doris-02
+  namespace: doris
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-doris-02
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-doris-03
+  namespace: doris
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-doris-03
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-doris-04
+  namespace: doris
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-doris-04
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-doris-05
+  namespace: doris
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-doris-05
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-doris-06
+  namespace: doris
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-doris-06
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-doris-07
+  namespace: doris
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-doris-07
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-doris-08
+  namespace: doris
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-doris-08
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-doris-09
+  namespace: doris
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-doris-09
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-doris-10
+  namespace: doris
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-doris-10
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-doris-11
+  namespace: doris
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-doris-11
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem

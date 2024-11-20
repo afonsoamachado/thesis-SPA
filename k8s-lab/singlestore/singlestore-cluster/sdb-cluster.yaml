@@ -1,0 +1,54 @@
+apiVersion: memsql.com/v1alpha1
+kind: MemsqlCluster
+metadata:
+  name: sdb-cluster
+  namespace: sdb
+spec:
+  license: <...>
+  adminHashedPassword: "*01A6717B58FF5C7EAFFF6CB7C96F7428EA65FE4C" #admin123
+  rootPasswordSecret:
+    key: password
+    name: rootpw
+  nodeImage:
+    repository: docker.io/singlestore/node
+    tag: alma-8.9.1-6d3dfbeee1
+
+  redundancyLevel: 1
+      
+  serviceSpec:
+    type: "NodePort"
+    
+  aggregatorSpec:
+    count: 1
+    height: 0.5
+    storageGB: 64
+    storageClass: no-provisioner
+
+  leafSpec:
+    count: 4
+    height: 0.5
+    storageGB: 64
+    storageClass: no-provisioner
+    
+  schedulingDetails:
+    master:
+      nodeSelector:
+        kubernetes.io/hostname: spa-k8s-01
+    leaf-ag1:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app
+              operator: In
+              values:
+              - node-sdb-cluster-leaf
+          topologyKey: "kubernetes.io/hostname"
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: NotIn
+              values:
+              - spa-k8s-01

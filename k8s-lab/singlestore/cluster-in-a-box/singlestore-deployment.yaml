@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sdb
+---
+# A deployment ensures pod(s) are restarted on failure
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: singlestoredb
+  namespace: sdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: singlestoredb
+  template:
+    # Here's the definition of the pod:
+    metadata:
+      # The service finds all pods with matching metadata
+      labels:
+        app: singlestoredb
+    spec:
+      containers:
+      - name: singlestoredb
+        image: docker.io/singlestore/cluster-in-a-box:alma-8.7.4-5877633a72-4.1.0-1.17.13
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3306 # MemSQL db
+        - containerPort: 8080 # MemSQL Studio
+        volumeMounts:
+        - mountPath: /data/singlestore-db
+          name: db-data
+        env:
+        - name: START_AFTER_INIT
+          value: 'Y'
+        - name: ROOT_PASSWORD
+          value: 'root'
+        - name: LICENSE_KEY
+          value: BGYzMDEwZmE2ZWIyYjQ0OTU4ZjhhYjdjYjEzZjBmYzgyAAAAAAAAAAAEAAAAAAAAACgwNgIZAPt/RAFg6BjyMFjCDrDf3kMYRY+LZcYGPQIZAICqZwrcvoCpxdOMtD0O/u8yx/eErYCskQ==
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: singlestoredb-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  name: singlestoredb-pvc
+  namespace: sdb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 30Gi
+status: {}

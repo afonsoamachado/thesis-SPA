@@ -1,0 +1,16 @@
+operatorServiceAccount:
+  create: true
+  annotations: {}
+  name: "flink-operator"
+
+#   Whether to add RBAC rule to list nodes which is needed for rest-service exposed as NodePort type
+rbac:
+  nodesRule:
+    create: true
+
+watchNamespaces: 
+  - "flink"
+
+operatorPod:
+  nodeSelector:
+    kubernetes.io/hostname: spa-k8s-06

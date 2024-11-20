@@ -1,0 +1,41 @@
+apiVersion: "clickhouse.altinity.com/v1"
+kind: "ClickHouseInstallation"
+metadata:
+  name: clickhouse-cluster
+  namespace: clickhouse
+spec:
+  configuration:
+    clusters:
+      - name: "ch-deployment"
+        # Templates are specified for this cluster explicitly
+        templates:
+          podTemplate: pod-template-with-volumes
+          serviceTemplate: chi-service-node-port-template
+        layout:
+          shardsCount: 1
+          replicasCount: 1
+  templates:
+    podTemplates:
+      - name: pod-template-with-volumes
+        spec:
+          containers:
+            - name: clickhouse
+              image: clickhouse/clickhouse-server:23.8
+              volumeMounts:
+                - name: storage-clickhouse
+                  mountPath: /var/lib/clickhouse
+              resources:
+                requests:
+                  memory: "1Gi"
+                  cpu: "500m"
+                limits:
+                  memory: "1Gi"
+                  cpu: "500m"
+    volumeClaimTemplates:
+      - name: storage-clickhouse
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Gi

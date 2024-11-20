@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-cockroachdb-00
+  namespace: cockroachdb
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-cockroachdb-00
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-cockroachdb-01
+  namespace: cockroachdb
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-cockroachdb-01
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-cockroachdb-02
+  namespace: cockroachdb
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-cockroachdb-02
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem

@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<!--
+  Copyright (c) 2020 Starburst Data, Inc. All rights reserved.
+
+  All information herein is owned by Starburst Data Inc. and its licensors
+  ("Starburst"), if any.  This software and the concepts it embodies are
+  proprietary to Starburst, are protected by trade secret and copyright law,
+  and may be covered by patents in the U.S. and abroad.  Distribution,
+  reproduction, and relicensing are strictly forbidden without Starburst's prior
+  written permission.
+
+  THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED.  THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+  AND NONINFRINGEMENT ARE EXPRESSLY DISCLAIMED. IN NO EVENT SHALL STARBURST BE
+  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR
+  OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR ITS USE
+  EVEN IF STARBURST HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<configuration>
+  <property>
+    <name>hive.metastore.warehouse.dir</name>
+    <value>s3a://warehouse/</value>
+  </property>
+  <property>
+    <name>fs.s3.impl</name>
+    <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
+  </property>
+  <property>
+    <name>fs.s3n.impl</name>
+    <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
+  </property>
+  <property>
+    <name>fs.s3a.endpoint</name>
+    <value>http://minio.minio.svc.cluster.local:9000</value>
+  </property>
+  <property>
+    <name>fs.s3a.access.key</name>
+    <value>WxkxsYtpuCZiZb24cW4A</value>
+  </property>
+  <property>
+    <name>fs.s3a.secret.key</name>
+    <value>Ab7r3q2Vsm2iKWcTHAAuJFLjUkLnbNIZP4FDz4Yk</value>
+  </property>
+  <property>
+    <name>fs.s3a.path.style.access</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>fs.gs.auth.service.account.json.keyfile</name>
+    <value/>
+  </property>
+  <property>
+    <name>fs.gs.impl</name>
+    <value>com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem</value>
+  </property>
+  <property>
+    <name>fs.AbstractFileSystem.gs.impl</name>
+    <value>com.google.cloud.hadoop.fs.gcs.GoogleHadoopFS</value>
+  </property>
+  <property>
+    <name>fs.azure.account.key..dfs.core.windows.net</name>
+    <value/>
+  </property>
+  <property>
+    <name>fs.azure.account.key..blob.core.windows.net</name>
+    <value/>
+  </property>
+  <property>
+    <name>fs.adl.oauth2.access.token.provider.type</name>
+    <value>ClientCredential</value>
+  </property>
+  <property>
+    <name>fs.adl.oauth2.client.id</name>
+    <value/>
+  </property>
+  <property>
+    <name>fs.adl.oauth2.credential</name>
+    <value/>
+  </property>
+  <property>
+    <name>fs.adl.oauth2.refresh.url</name>
+    <value/>
+  </property>
+  <property>
+    <name>fs.azure.account.auth.type</name>
+    <value/>
+  </property>
+  <property>
+    <name>fs.azure.account.oauth.provider.type</name>
+    <value/>
+  </property>
+  <property>
+    <name>fs.azure.account.oauth2.client.id</name>
+    <value/>
+  </property>
+  <property>
+    <name>fs.azure.account.oauth2.client.secret</name>
+    <value/>
+  </property>
+  <property>
+    <name>fs.azure.account.oauth2.client.endpoint</name>
+    <value/>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionURL</name>
+    <value>jdbc:postgresql://postgres.postgres.svc.cluster.local:5432/metastore_db</value>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionDriverName</name>
+    <value>org.postgresql.Driver</value>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionUserName</name>
+    <value>postgres</value>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionPassword</name>
+    <value>postgres</value>
+  </property>
+  <property>
+    <name>datanucleus.autoCreateSchema</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>datanucleus.autoCreateTables</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>datanucleus.autoCreateColumns</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>datanucleus.autoCreateConstraints</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>datanucleus.fixedDatastore</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>datanucleus.autoStartMechanism</name>
+    <value>SchemaTable</value>
+  </property>
+  <property>
+    <name>hive.metastore.schema.verification</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>metastore.storage.schema.reader.impl</name>
+    <value>org.apache.hadoop.hive.metastore.SerDeStorageSchemaReader</value>
+  </property>
+  <property>
+    <name>hive.security.authorization.createtable.owner.grants</name>
+    <value>ALL</value>
+    <description>The set of privileges automatically granted to the owner whenever a table gets created.
+        </description>
+  </property>
+  <property>
+    <name>hive.security.metastore.authorization.auth.reads</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>hive.users.in.admin.role</name>
+    <value/>
+  </property>
+</configuration>

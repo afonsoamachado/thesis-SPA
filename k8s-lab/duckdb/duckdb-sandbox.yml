@@ -1,0 +1,72 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: duckdb
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: duckdb-pv
+  namespace: duckdb
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-duckdb-00
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: duckdb-pvc
+  namespace: duckdb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duckdb
+  namespace: duckdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: duckdb
+  template:
+    metadata:
+      labels:
+        app: duckdb
+    spec:
+      containers:
+      - name: duckdb
+        image: afonsoamachado/duckdb:1.0.0
+        imagePullPolicy: IfNotPresent
+        command: [ "sleep", "infinity" ] # Keeps the container running
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        volumeMounts:
+        - mountPath: /data
+          name: duckdb-storage
+      volumes:
+      - name: duckdb-storage
+        persistentVolumeClaim:
+          claimName: duckdb-pvc
+  

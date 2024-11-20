@@ -1,0 +1,48 @@
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  namespace: flink
+  name:  session-cluster-1
+spec:
+  image: afonsoamachado/flink-iceberg-kafka:1.17-beta
+  imagePullPolicy: Always
+  flinkVersion: v1_17
+  podTemplate:
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: pod-template
+    spec:
+      containers:
+        - name: flink-main-container
+          env:
+            - name: ENABLE_BUILT_IN_PLUGINS
+              value: flink-s3-fs-hadoop-1.17.2.jar;
+          volumeMounts:
+            - name: hive-site-config-volume
+              mountPath: /opt/hive-conf/hive-site.xml
+              subPath: hive-site.xml
+      volumes:
+      - name: hive-site-config-volume
+        configMap:
+          name: hive-site-config
+  flinkConfiguration:
+    jobmanager.rpc.address: session-cluster-1.flink.svc.cluster.local:6123
+    state.backend.type: hashmap
+    state.checkpoint-storage: filesystem
+    state.checkpoints.dir: s3a://flink//checkpoints
+    execution.checkpointing.interval: '10000'
+    s3.endpoint: http://tenant-00-hl.minio.svc.cluster.local:9000
+    s3.path.style.access: "true"
+    s3.access-key: minio
+    s3.secret-key: minio123
+  serviceAccount: flink-operator
+  mode: native
+  jobManager:
+    resource:
+      memory: "4G"
+      cpu: 1
+  taskManager:
+    resource:
+      memory: "4G"
+      cpu: 1

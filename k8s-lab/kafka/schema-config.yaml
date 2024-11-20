@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: schema-config
+  namespace: confluent
+data:
+  schema: |
+    {
+      "namespace": "iceberg.tpch",
+      "type": "record",
+      "name": "customerAvro",
+      "fields": [
+        {"name": "custkey", "type": "int"},
+        {"name": "name", "type": "string"}
+      ]
+    }
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: Schema
+metadata:
+  name: customerAvro
+  namespace: confluent
+spec:
+  data:
+    configRef: schema-config
+    format: avro

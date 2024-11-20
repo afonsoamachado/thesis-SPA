@@ -1,0 +1,11 @@
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkSessionJob
+metadata:
+  name: basic-session-job-example
+  namespace: flink
+spec:
+  deploymentName: session-cluster-1
+  job:
+    jarURI: https://repo1.maven.org/maven2/org/apache/flink/flink-examples-streaming_2.12/1.16.1/flink-examples-streaming_2.12-1.16.1-TopSpeedWindowing.jar
+    parallelism: 4
+    upgradeMode: stateless

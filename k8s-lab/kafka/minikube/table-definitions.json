@@ -1,0 +1,31 @@
+{
+    "tableName": "customer",
+    "schemaName": "test",
+    "topicName": "test.customer",
+    "key": {
+      "dataFormat": "raw",
+      "fields": [
+        {
+            "name": "kafka_key",
+            "mapping": "0",
+            "type": "VARCHAR",
+            "hidden": "false"
+        }
+      ]
+    },
+    "message": {
+      "dataFormat": "json",
+      "fields": [
+        {
+            "name": "custkey",
+            "mapping": "custkey",
+            "type": "INTEGER"
+        },
+        {
+            "name": "name",
+            "mapping": "name",
+            "type": "VARCHAR"
+        }
+      ]
+    }
+  }

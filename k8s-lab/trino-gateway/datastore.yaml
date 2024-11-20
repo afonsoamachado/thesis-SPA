@@ -1,0 +1,5 @@
+dataStore:
+   jdbcUrl: jdbc:postgresql://postgres.postgres.svc.cluster.local:5432/gateway
+   user: postgres
+   password: postgres
+   driver: org.postgresql.Driver

@@ -1,0 +1,144 @@
+﻿image:
+  tag: "451"
+  pullPolicy: "IfNotPresent"
+
+server:
+  node:
+    environment: "local"
+    dataDir: /data/trino
+    pluginDir: /usr/lib/trino/plugin
+  workers: 1
+  coordinatorExtraConfig: |
+    catalog.config-dir=/etc/trino/dynamic-catalog
+
+coordinator:
+  http-server.authentication.type: none
+  jvm:
+    maxHeapSize: "3G"
+    gcMethod:
+      type: "UseG1GC"
+      g1:
+        heapRegionSize: "32M"
+  additionalJVMConfig:
+  - -XX:InitialRAMPercentage=80
+  - -XX:MaxRAMPercentage=80
+  - -Dfile.encoding=UTF-8
+  - -XX:+UnlockDiagnosticVMOptions
+  resources:
+    requests:
+      cpu: "1"
+      memory: "2Gi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+  additionalVolumes:
+  - name: catalogs
+    persistentVolumeClaim:
+      claimName: catalogs-pvc
+  additionalVolumeMounts:
+    - name: catalogs
+      mountPath: /etc/trino/dynamic-catalog
+      readOnly: false
+
+worker:
+  jvm:
+    maxHeapSize: "3G"
+    gcMethod:
+      type: "UseG1GC"
+      g1:
+        heapRegionSize: "32M"
+  additionalJVMConfig:
+  - -XX:InitialRAMPercentage=80
+  - -XX:MaxRAMPercentage=80
+  - -Dfile.encoding=UTF-8
+  - -XX:+UnlockDiagnosticVMOptions
+  resources:
+    requests:
+      cpu: "1"
+      memory: "2Gi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+
+service:
+  enabled: true
+  type: ClusterIP
+  httpPort: 8080
+  connectorPort: 8082
+
+additionalCatalogs:
+  singlestore: |-
+    connector.name=singlestore
+    connection-url=jdbc:singlestore://singlestoredb.sdb.svc.cluster.local:3306
+    connection-user=root
+    connection-password=root
+    metadata.cache-ttl=60m
+    metadata.cache-missing=true
+  tpch: |-
+    connector.name=tpch
+  iceberg: |-
+    connector.name=iceberg
+    iceberg.catalog.type=hive_metastore
+    iceberg.file-format=PARQUET
+    iceberg.security=ALLOW_ALL
+    hive.metastore.uri=thrift://hive.trino.svc.cluster.local:9083
+    fs.native-s3.enabled=true
+    s3.endpoint=http://minio.minio.svc.cluster.local:9000
+    s3.region=us-east-1
+    s3.path-style-access=true
+    s3.aws-access-key=minio
+    s3.aws-secret-key=minio123
+    s3.socket-connect-timeout=30s
+    s3.socket-read-timeout=30s
+    fs.cache.enabled=true
+    fs.cache.directories=/tmp/trino-cache
+    fs.cache.max-sizes=5GB
+    fs.cache.ttl=30s
+    fs.cache.preferred-hosts-count=2
+  kafka: |-
+    connector.name=kafka
+    kafka.nodes=kafka.confluent.svc.cluster.local:9092
+    kafka.table-names=test.customer
+    kafka.hide-internal-columns=true
+    kafka.table-description-supplier=file
+    kafka.table-description-dir=/etc/kafka
+
+kafka:
+  mountPath: "/etc/kafka" # default "/etc/trino/schemas"
+  tableDescriptions: 
+    customer.json: |-
+      {
+        "tableName": "customer",
+        "schemaName": "test",
+        "topicName": "test.customer",
+        "key": {
+          "dataFormat": "raw",
+          "fields": [
+            {
+                "name": "kafka_key",
+                "mapping": "0",
+                "type": "VARCHAR",
+                "hidden": "false"
+            }
+          ]
+        },
+        "message": {
+          "dataFormat": "json",
+          "fields": [
+            {
+                "name": "custkey",
+                "mapping": "custkey",
+                "type": "INTEGER"
+            },
+            {
+                "name": "name",
+                "mapping": "name",
+                "type": "VARCHAR"
+            }
+          ]
+        }
+      }
+
+additionalConfigProperties:
+- catalog.management=dynamic
+- http-server.process-forwarded=true

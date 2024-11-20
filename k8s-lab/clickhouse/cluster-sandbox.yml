@@ -1,0 +1,77 @@
+apiVersion: "clickhouse.altinity.com/v1"
+kind: "ClickHouseInstallation"
+metadata:
+  name: clickhouse-cluster
+  namespace: clickhouse
+spec: 
+  configuration:
+    users:
+        default/networks/ip: "::/0"
+    clusters:
+      - name: "ch-deployment"
+        # Templates are specified for this cluster explicitly
+        templates:
+          podTemplate: pod-template-with-volumes
+          serviceTemplate: chi-service-node-port-template
+        layout:
+          shardsCount: 1
+          replicasCount: 1
+  templates:
+    podTemplates:
+      - name: pod-template-with-volumes
+        spec:
+          containers:
+            - name: clickhouse
+              image: clickhouse/clickhouse-server:24.10.1.2812
+              volumeMounts:
+                - name: storage-clickhouse
+                  mountPath: /var/lib/clickhouse
+              resources:
+                requests:
+                  memory: "8Gi"
+                  cpu: "2"
+                limits:
+                  memory: "8Gi"
+                  cpu: "2"
+              nodeSelector:
+                kubernetes.io/hostname: spa-k8s-06
+    volumeClaimTemplates:
+      - name: storage-clickhouse
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Gi
+    serviceTemplates:
+    - name: chi-service-node-port-template
+      generateName: "service-{chi}"
+      spec:
+        selector:
+          app: clickhouse
+        ports:
+          - name: http
+            port: 8123
+            targetPort: 8123
+            nodePort: 30081  # Optional: specify a nodePort if needed
+          - name: client
+            port: 9000
+            targetPort: 9000
+            nodePort: 30090  # Optional: specify a nodePort if needed
+        type: NodePort
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-clickhouse-00
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  nfs: 
+    path: /datadrives/datadrive00/pv-clickhouse-00
+    server: 10.0.0.38 
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: no-provisioner
+  volumeMode: Filesystem

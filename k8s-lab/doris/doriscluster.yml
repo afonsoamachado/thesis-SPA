@@ -1,0 +1,93 @@
+apiVersion: doris.selectdb.com/v1
+kind: DorisCluster
+metadata:
+  labels:
+    app.kubernetes.io/name: doriscluster
+  name: doriscluster-minimal
+  namespace: doris
+spec:
+  feSpec:
+    replicas: 3
+    image: selectdb/doris.fe-ubuntu:2.1.7
+    service:
+      type: NodePort
+      servicePorts:
+        - nodePort: 31001
+          targetPort: 8030
+        - nodePort: 31002
+          targetPort: 8040
+        - nodePort: 31003
+          targetPort: 9030
+    limits:
+      cpu: 4
+      memory: 16Gi
+    requests:
+      cpu: 4
+      memory: 16Gi
+    persistentVolumes:
+    - mountPath: /opt/apache-doris/fe/doris-meta
+      name: storage0
+      annotations:
+        "csi.storage.k8s.io/node-publish-secret-name": "fe-data"
+        "csi.storage.k8s.io/node-publish-secret-namesspace": "doris"
+      persistentVolumeClaimSpec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          # notice: if the storage size less 5G, fe will not start normal.
+          requests:
+            storage: 50Gi
+    - mountPath: /opt/apache-doris/fe/log
+      name: storage1
+      annotations:
+        "csi.storage.k8s.io/node-publish-secret-name": "fe-data"
+        "csi.storage.k8s.io/node-publish-secret-namesspace": "doris"
+      persistentVolumeClaimSpec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi
+  beSpec:
+    replicas: 3
+    image: selectdb/doris.be-ubuntu:2.1.7
+    service:
+      type: NodePort
+      servicePorts:
+        - nodePort: 31005
+          targetPort: 9060
+        - nodePort: 31006
+          targetPort: 8040
+        - nodePort: 31007
+          targetPort: 9050
+        - nodePort: 31008
+          targetPort: 8060
+    limits:
+      cpu: 4
+      memory: 16Gi
+    requests:
+      cpu: 4
+      memory: 16Gi
+    persistentVolumes:
+    - mountPath: /opt/apache-doris/be/storage
+      name: storage2
+      annotations:
+        "csi.storage.k8s.io/node-publish-secret-name": "be-data"
+        "csi.storage.k8s.io/node-publish-secret-namesspace": "doris"
+      persistentVolumeClaimSpec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi
+    - mountPath: /opt/apache-doris/be/log
+      name: storage3
+      annotations:
+        "csi.storage.k8s.io/node-publish-secret-name": "be-data"
+        "csi.storage.k8s.io/node-publish-secret-namesspace": "doris"
+      persistentVolumeClaimSpec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi
