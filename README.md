@@ -4,7 +4,7 @@ This repository contains the code and documentation for the thesis project condu
 
 ## Description
 
-The project focuses on engineering a scala processing architecture is underscored by the critical needs of modern banking Institutions and platform-driven innovation.
+The project focuses on engineering a scala processing architecture that is underscored by the critical needs of modern banking Institutions and platform-driven innovation.
 
 ## Technologies Used
 
