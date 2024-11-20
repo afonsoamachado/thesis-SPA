@@ -1,4 +1,4 @@
-# Thesis SPA
+# Thesis - Scale Processing Architecture for Banking Operations
 
 This repository contains the code and documentation for the thesis project conducted at ISEL in collaboration with Millennium BCP.
 
